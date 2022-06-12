@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import NFT, Collection, NFTHistory, Properties
+
+admin.site.register(NFT)
+admin.site.register(Collection)
+admin.site.register(NFTHistory)
+admin.site.register(Properties)

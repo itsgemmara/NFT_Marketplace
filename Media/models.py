@@ -1,18 +1,14 @@
 from django.db import models
 
 
-class Audio(models.Model):
-    audio = models.FileField(upload_to='uploads/')
-
-
-class Image(models.Model):
-    image = models.ImageField(upload_to='uploads/')
-
-
-class Video(models.Model):
-    video = models.FileField(upload_to='uploads/')
-
-
-class TreeDModels (models.Model):
-    treeD_models = models.FileField(upload_to='uploads/')
+class File(models.Model):
+    file = models.ImageField(upload_to='uploads/')
+    FILE_CHOICES = [
+        ('im', 'Image'),
+        ('vd', 'Video'),
+        ('3d', '3D Models'),
+        ('ad', 'Audio'),
+    ]
+    type = models.CharField(max_length=2, choices=FILE_CHOICES)
+    is_nft = models.BooleanField(default=False)
 

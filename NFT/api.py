@@ -10,7 +10,7 @@ class NFTViewSet(mixins.CreateModelMixin,
                    mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
                    viewsets.GenericViewSet,
-                  ):
+                   ):
     """
     General ViewSet description
     list: List NFT
@@ -30,11 +30,4 @@ class NFTViewSet(mixins.CreateModelMixin,
             return NFTListSerializer
         return NFTSerializer
 
-    # def get_queryset(self):
-    #     if self.request.user.is_superuser or self.request.user.is_staff:
-    #         return self.queryset
-    #     else:
-    #         if self.request.user.phone_number:
-    #             return self.queryset.filter(phone_number=self.request.user.phone_number)
-    #         else:
-    #             return self.queryset.filter(email=self.request.user.email)
+
