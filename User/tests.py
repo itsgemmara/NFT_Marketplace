@@ -49,9 +49,9 @@ class UserTestCase(APITestCase):
         response = self.client.put(f'/users/users/user-viewset//{self.user.id}/', self.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_delete_user(self):
+    def test_dont_allow_delete_user(self):
         response = self.client.delete(f'/users/users/user-viewset//{self.user.id}/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_read_user_list(self):
         response = self.client.get('/users/users/user-viewset//')

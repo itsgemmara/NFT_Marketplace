@@ -9,6 +9,9 @@ class Properties(models.Model):
     description = models.TextField()
     prop_is_deleted = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.name
+
 
 class NFT(models.Model):
     name = models.CharField(max_length=255)
@@ -18,11 +21,15 @@ class NFT(models.Model):
     blockchain_name = models.CharField(max_length=50)  # choices?
     sensitive = models.BooleanField(default=False)
     supply = models.IntegerField(default=1)
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_now=True)
     listed_at = models.DateTimeField(null=True, blank=True)
     nft_is_deleted = models.BooleanField(default=False)
+    prop = models.ManyToManyField(Properties)
     creator = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_creator_profile')
     owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_owner_profile')
+
+    def __str__(self):
+        return self.name
 
 
 class NFTHistory(models.Model):
@@ -38,10 +45,16 @@ class NFTHistory(models.Model):
     taker = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_taker_profile')
     seller = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_seller_profile')
 
+    def __str__(self):
+        return self.nft_id
+
 
 class Collection(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    File = models.ManyToManyField(File, null=True, blank=True)
-    NFTies = models.ManyToManyField(NFT, related_name='collection_nft')
+    File = models.ManyToManyField(File)
+    NFTies = models.ManyToManyField(NFT)
     collection_is_deleted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name

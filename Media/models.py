@@ -12,3 +12,10 @@ class File(models.Model):
     type = models.CharField(max_length=2, choices=FILE_CHOICES)
     is_nft = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str(self.pk)
+
+
+
+class F(models.Model):
+    file = models.ImageField(upload_to='uploads/')

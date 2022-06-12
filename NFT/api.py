@@ -23,11 +23,12 @@ class NFTViewSet(mixins.CreateModelMixin,
     serializer_class = NFTSerializer
 
     def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update' or self.action == 'partial_update' or\
-                self.action == 'retrieve':
-            return NFTSerializer
-        elif self.action == 'list':
-            return NFTListSerializer
+        if self.action == 'create' or self.action == 'update' or self.action == 'partial_update':
+            return ShowNFTSerializer
+        elif self.action == 'list' or self.action == 'retrieve':
+            return ShowNFTSerializer
         return NFTSerializer
 
+    def get_queryset(self):
+        return self.queryset.filter(nft_is_deleted=False)
 

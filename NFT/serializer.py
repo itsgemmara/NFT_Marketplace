@@ -8,13 +8,13 @@ class NFTSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NFT
-        fields = ("name", "description", "image", "video", "audio",
-                  "treeD_models", "link", "blockchain_name", "sensitive", "supply")
+        fields = ("name", "description", "File", "link", "blockchain_name", "sensitive", "supply")
 
 
-class NFTListSerializer(serializers.ModelSerializer):
+class ShowNFTSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NFT
-        fields = ("name", "image", "video", "audio", "treeD_models")
+        fields = ("name", "File", "description", 'creator', 'owner', "supply", 'sensitive', "link", "blockchain_name",
+                  'created_at', 'listed_at', )
 
