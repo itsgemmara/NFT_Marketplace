@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .api import *
 
 user_router = DefaultRouter()
-user_router.register(r'user-viewset/', UserViewSet, basename='users')
+user_router.register(r'user-view_set', UserViewSet, basename='users')
 
 urlpatterns = [
     path('users/', include(user_router.urls)),

@@ -24,7 +24,7 @@ class NFTViewSet(mixins.CreateModelMixin,
 
     def get_serializer_class(self):
         if self.action == 'create' or self.action == 'update' or self.action == 'partial_update':
-            return ShowNFTSerializer
+            return NFTSerializer
         elif self.action == 'list' or self.action == 'retrieve':
             return ShowNFTSerializer
         return NFTSerializer

@@ -2,11 +2,11 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .api import *
-from Media.views import create
+
 nft_router = DefaultRouter()
-nft_router.register(r'nft-viewset/', NFTViewSet, basename='nft')
+nft_router.register(r'nft-view-set', NFTViewSet, basename='nft')
 
 urlpatterns = [
-    path('nfts/', include(nft_router.urls)),
-    path('cr/', create)
+    path('nfties/', include(nft_router.urls)),
+
 ]
