@@ -1,8 +1,10 @@
 from rest_framework import mixins
 from rest_framework import viewsets
+from rest_framework import permissions
 
 from .serializer import *
 from .models import NFT
+from .permissions import NFTIsOwner
 
 
 class NFTViewSet(mixins.CreateModelMixin,
@@ -31,4 +33,14 @@ class NFTViewSet(mixins.CreateModelMixin,
 
     def get_queryset(self):
         return self.queryset.filter(nft_is_deleted=False)
+
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [permissions.IsAuthenticated(), ]
+            return permission_classes
+        elif self.action == 'update' or self.action == 'partial_update':
+            permission_classes = [permissions.IsAuthenticated(), NFTIsOwner()]
+            return permission_classes
+        return [permissions.AllowAny()]
+
 

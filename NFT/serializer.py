@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 
+
 from .models import NFT
 
 
@@ -15,18 +16,24 @@ class NFTSerializer(serializers.ModelSerializer):
                 raise ValidationError('Specify the NFT file.')
         return validated_data
 
+    def create(self, validated_data):
+        request = self.context.get('request', None)
+        if request:
+            validated_data['owner'] = request.user
+            validated_data['creator'] = request.user
+        return super().create(validated_data)
+
     class Meta:
         model = NFT
-        fields = ("name", "description", "File", "link", "blockchain_name", "sensitive", "supply", 'creator', 'owner')
+        fields = ("name", "description", "File", "link", "blockchain_name", "sensitive", "supply")
 
 
 class ShowNFTSerializer(serializers.ModelSerializer):
 
-    def validate(self, validated_data):
-        print(validated_data)
-        return validated_data
     class Meta:
         model = NFT
         fields = ("name", "File", "description", 'creator', 'owner', "supply", 'sensitive', "link", "blockchain_name",
-                  'created_at', 'listed_at', )
+                  'created_at', 'listed_at', 'pk', )
+
+
 

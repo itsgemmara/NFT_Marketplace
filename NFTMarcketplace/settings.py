@@ -1,6 +1,7 @@
 from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from rest_framework import filters
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -139,13 +140,14 @@ sentry_sdk.init(
 )
 
 # drf
-#
-# REST_FRAMEWORK = {
-#
-#     "DEFAULT_AUTHENTICATION_CLASSES": (
-#         "path.to.JWTAuthentication",
-#     ),
-#     "DEFAULT_PERMISSION_CLASSES": (
-#         "rest_framework.permissions.IsAuthenticated",
-#     )
-# }
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+
+}

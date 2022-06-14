@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, login, get_user_model
 
-from .validators import PhoneNumberValidator
+from .validators import PhoneNumberValidator, VerifyValidator
+
+
 User = get_user_model()
 UserModel = get_user_model()
 
@@ -21,7 +24,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
             phone_number_validator = PhoneNumberValidator(phone_number=phone_number,
                                                           valid_digits=valid_digits)
             validated_data['phone_number'] = phone_number_validator.phone_number_validator()
-            print(validated_data['phone_number'], 55555555555555555555555555555555555)
         elif not validated_data['email']:
             raise ValidationError("Phone number or email must be set")
         return validated_data
@@ -65,3 +67,41 @@ class UserRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ("phone_number", "first_name", "last_name", "email", "date_joined")
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.CharField()
+    phone_number = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, validated_data):
+        verify_validators = VerifyValidator(phone_number=self.phone_number, email=self.email)
+        phone_number_is_active = verify_validators.phone_number_is_verified()
+        email_is_active = verify_validators.email_is_verified()
+        if validated_data['phone_number'] and validated_data['password']:
+            if phone_number_is_active:
+                user = authenticate(phone_number=validated_data['phone_number'],
+                                    password=validated_data['password'])
+            else:
+                raise ValidationError('you should verify your phone number first')
+        elif validated_data['email'] and validated_data['password']:
+            if email_is_active:
+                user = authenticate(email=validated_data['email'], password=validated_data['password'])
+            else:
+                raise ValidationError('you should verify your email first')
+        else:
+            raise ValueError('Must provide password and one of the phone number or email.')
+        if user:
+            if user.is_active:
+                if not user.is_deleted:
+                    validated_data["user"] = user
+                else:
+                    raise ValidationError("User account is not found.")
+            else:
+                raise ValidationError("User is deactivated.")
+            return validated_data
+        raise ValidationError("unable to login")
+
+    class Meta:
+        model = UserModel
+        fields = ("phone_number", "password", 'email')

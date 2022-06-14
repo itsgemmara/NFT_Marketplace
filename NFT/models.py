@@ -25,8 +25,10 @@ class NFT(models.Model):
     listed_at = models.DateTimeField(null=True, blank=True)
     nft_is_deleted = models.BooleanField(default=False)
     prop = models.ManyToManyField(Properties)
-    creator = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_creator_profile')
-    owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='nft_owner_profile')
+    creator = models.ForeignKey(Profile, on_delete=models.DO_NOTHING,
+                                related_name='nft_creator_profile', null=True, blank=True)
+    owner = models.ForeignKey(Profile, on_delete=models.DO_NOTHING,
+                              related_name='nft_owner_profile', null=True, blank=True)
 
     def __str__(self):
         return self.name
